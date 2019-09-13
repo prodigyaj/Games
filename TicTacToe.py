@@ -47,10 +47,10 @@ class Board:
         return self.__complete, self.__winner
 
     def SetMark(self, mark, index):
-        if(int(index) <1 or int(index) >9):
+        if(index <1 or index >9):
             print("Invalid index, enter index between [1,9]")
             return False
-
+        index = int(index)
         x = int((index - 1)/3)
         y = (index - 1) % 3
 
@@ -101,7 +101,11 @@ class GamePlay:
         if self.__human[self.__curplayer] == True:
             while True:
                 print("Please make your move by entering the index")
-                index = int(input())
+                try:
+                    index = int(input())
+                except:
+                    print("Invalid index, enter index between [1,9]")
+                    continue
                 if self.__b.SetMark(self.__users[self.__curplayer],index) == True:
                     move = index
                     break
@@ -118,13 +122,13 @@ class GamePlay:
         while self.__b.CheckComplete() == False and len(self.__moves_available) != 0:
             self.__make__move()
             comp,win = self.__b.CheckIfGameOver()
-            print(comp,win)
+            #print(comp,win)
             self.__curplayer = not self.__curplayer
 
         if self.__b.CheckWinner() == -1:
             print("Well Played the game finished in a draw")
         else:
-            if self.__human[self.__b.CheckWinner()] == False:
+            if self.__human[self.__users.index(self.__b.CheckWinner())] == False:
                 print("Sorry! :( Computer has won")
             else:
                 print("Congratulations Human! You have won")
